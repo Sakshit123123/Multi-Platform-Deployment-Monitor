@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi Platform Deployment Monitor</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #1a1a2e;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sidebar h2 {
+      text-align: center;
+      padding: 15px;
+      margin: 0;
+      background: #16213e;
+    }
+    .menu {
+      flex-grow: 1;
+    }
+    .menu button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      background: #1a1a2e;
+      color: white;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid #333;
+    }
+    .menu button:hover {
+      background: #0f3460;
+    }
+    .sidebar .settings {
+      padding: 15px;
+      text-align: center;
+      background: #16213e;
+      cursor: pointer;
+    }
+    /* Main Content */
+    .main {
+      flex-grow: 1;
+      padding: 20px;
+      background: #f4f4f4;
+      position: relative;
+      overflow-y: auto;
+    }
+    .heading {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .profile {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ddd;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .content h3 {
+      margin-top: 0;
+    }
+    .platform-list {
+      list-style: none;
+      padding: 0;
+    }
+    .platform-list li {
+      background: #fff;
+      padding: 10px;
+      margin: 5px 0;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .platform-list li:hover {
+      background: #e0e0e0;
+    }
+    .remove-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .remove-btn:hover {
+      background: darkred;
+    }
+    /* Form */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .btn {
+      background: #0f3460;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #16213e;
+    }
+    /* Oval Boxes */
+    .oval-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .oval-box {
+      flex: 1 1 calc(30% - 10px);
+      min-width: 180px;
+      background: white;
+      border-radius: 50px;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      font-weight: bold;
+      border: 2px solid #ccc;
+      box-shadow: 0px 3px 5px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    .oval-box span {
+      margin-right: 10px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div>
+      <h2>Dashboard</h2>
+      <div class="menu">
+        <button onclick="showAllPlatforms()">All Platforms</button>
+        <button onclick="showAddPlatformForm()">Add Platform</button>
+        <button onclick="showRemovePlatform()">Remove Platform</button>
+      </div>
+    </div>
+    <div class="settings" onclick="alert('Settings Page')">⚙ Settings</div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="heading">Multi Platform Deployment Monitor</div>
+    <div class="profile" onclick="showProfile()">Me</div>
+    <div class="content" id="content">
+      <h3>Welcome</h3>
+      <p>Select an option from the dashboard.</p>
+    </div>
+  </div>
+
+  <script>
+    let platforms = ["AWS","GCP","Azure"];
+    let userProfile = {
+      name: "Your Name",
+      email: "you@example.com",
+      role: "Developer",
+      joined: "2025-01-01"
+    };
+
+    function showAllPlatforms() {
+      let html = `<h3>All Platforms</h3><ul class="platform-list">`;
+      platforms.forEach((p) => {
+        html += `<li onclick="showPlatformDetails('${p}')">${p}</li>`;
+      });
+      html += `</ul>`;
+      document.getElementById("content").innerHTML = html;
+    }
+
+    function showAddPlatformForm() {
+      document.getElementById("content").innerHTML = `
+        <h3>Add Platform</h3>
+        <div class="form-group">
+          <label>Platform Name</label>
+          <input type="text" id="platformName" placeholder="e.g. AWS, GCP, GitHub">
+        </div>
+        <div class="form-group">
+          <label>Account/Project ID</label>
+          <input type="text" id="projectId" placeholder="Enter Project ID">
+        </div>
+        <div class="form-group">
+          <label>API Key / Access Token</label>
+          <input type="text" id="apiKey" placeholder="Enter API Key">
+        </div>
+        <div class="form-group">
+          <label>Region (Optional)</label>
+          <input type="text" id="region" placeholder="e.g. us-east-1">
+        </div>
+        <button class="btn" onclick="addPlatform()">Add</button>
+      `;
+    }
+
+    function addPlatform() {
+      const name = document.getElementById("platformName").value.trim();
+      if(name) {
+        platforms.push(name);
+        alert(name + " platform added!");
+        showAllPlatforms();
+      } else {
+        alert("Please enter a platform name");
+      }
+    }
+
+    function showRemovePlatform() {
+      let html = `<h3>Remove Platform</h3><ul class="platform-list">`;
+      platforms.forEach((p, index) => {
+        html += `<li>${p} <button class="remove-btn" onclick="removePlatform(${index})">Remove</button></li>`;
+      });
+      html += `</ul>`;
+      document.getElementById("content").innerHTML = html;
+    }
+
+    function removePlatform(index) {
+      const removed = platforms.splice(index, 1);
+      alert(removed + " removed!");
+      showRemovePlatform();
+    }
+
+    function showPlatformDetails(name) {
+      document.getElementById("content").innerHTML = `
+        <h3>${name} - Monitoring Details</h3>
+        <div class="oval-container">
+          <div class="oval-box" onclick="showDetail('Uptime', 'Uptime is 99.9%, system running normally.')"><span>🟢</span> Uptime: 99.9%</div>
+          <div class="oval-box" onclick="showDetail('Downtime', 'Downtime recorded: 0.1%. Last outage: 2 mins at 2:30 AM.')"><span>🔴</span> Downtime: 0.1%</div>
+          <div class="oval-box" onclick="showDetail('Alerts', 'No active alerts. Last resolved alert: Memory usage high on 18th Sept.')"><span>🚨</span> Alerts: None</div>
+          <div class="oval-box" onclick="showDetail('Errors', 'No errors found in last 24 hrs.')"><span>❌</span> Errors: None</div>
+          <div class="oval-box" onclick="showDetail('Bugs', '0 open bugs. Last bug fixed on 19th Sept.')"><span>🐞</span> Bugs: 0</div>
+          <div class="oval-box" onclick="showDetail('Security', 'No hacker attacks detected. Last security scan clean.')"><span>🛡</span> Security Issues: None</div>
+          <div class="oval-box" onclick="showDetail('Auto Repair', 'Auto repair system is active. Last action: restarted a crashed service.')"><span>🔄</span> Auto Repair: Active</div>
+        </div>
+      `;
+    }
+
+    function showDetail(title, detail) {
+      document.getElementById("content").innerHTML = `
+        <h3>${title} - Details</h3>
+        <p>${detail}</p>
+        <button class="btn" onclick="showAllPlatforms()">Back</button>
+      `;
+    }
+
+    function showProfile() {
+      document.getElementById("content").innerHTML = `
+        <h3>My Profile</h3>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="pname" value="${userProfile.name}">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="text" id="pemail" value="${userProfile.email}">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <input type="text" id="prole" value="${userProfile.role}">
+        </div>
+        <div class="form-group">
+          <label>Joined</label>
+          <input type="text" id="pjoined" value="${userProfile.joined}">
+        </div>
+        <button class="btn" onclick="saveProfile()">Save</button>
+      `;
+    }
+
+    function saveProfile() {
+      userProfile.name = document.getElementById("pname").value;
+      userProfile.email = document.getElementById("pemail").value;
+      userProfile.role = document.getElementById("prole").value;
+      userProfile.joined = document.getElementById("pjoined").value;
+      alert("Profile updated!");
+      showProfile();
+    }
+  </script>
+</body>
+</html>
